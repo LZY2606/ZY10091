@@ -111,8 +111,10 @@ class HTMLRenderer(Renderer):
         url = self.escape_url(element.dest)
         render_func = self.render
         self.render = self.render_plain_text  # type: ignore
-        body = self.render_children(element)
-        self.render = render_func  # type: ignore
+        try:
+            body = self.render_children(element)
+        finally:
+            self.render = render_func  # type: ignore
         return template.format(url, body, title)
 
     def render_literal(self, element: inline.Literal) -> str:
